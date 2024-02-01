@@ -45,6 +45,10 @@ document.body.onkeydown = async e => {
             }, 600);
         }
 
+        if (result.success || result.finished) {
+            showDialog(result.success, result.success ? value : result.answer);
+        }
+
         if (result.letters) {
             result.letters.forEach((x, i) => {
                 const keyElement = document.querySelector(`div.key[data-key="${insertedTiles[i].innerHTML}"]`);
@@ -82,4 +86,24 @@ document.body.onkeydown = async e => {
             insertedTiles[insertedTiles.length - 1].dataset.state = emptyState;
         }
     }
+};
+
+const showDialog = (isWinner, answer) => {
+    const dialog = document.createElement("dialog");
+    const dialogHeader = document.createElement("h1");
+    dialogHeader.innerText = isWinner ? "Congratulation!" : "Better luck next time!";
+    const dialogBody = document.createElement("div");
+    const dialogBodyText = document.createElement("p");
+    dialogBodyText.innerText = `The answer is ${answer.toUpperCase()}`;
+    const dialogBodyBtn = document.createElement("button");
+    dialogBodyBtn.innerText = "close";
+    dialogBodyBtn.addEventListener("click", () => {location.reload()});
+
+    dialogBody.appendChild(dialogBodyText);
+    dialogBody.appendChild(dialogBodyBtn);
+    dialog.appendChild(dialogHeader);
+    dialog.appendChild(dialogBody);
+    
+    document.body.appendChild(dialog);
+    dialog.showModal();
 };
